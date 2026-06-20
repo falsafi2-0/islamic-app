@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" style="background:#0d1b2a">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,9 +14,23 @@
 a, button, .clickable, [onclick] { outline: none; -webkit-touch-callout: none; user-select: none; }
 a:focus, button:focus, .clickable:focus, [onclick]:focus { outline: none; }
 
+:root, body {
+  --bg1: #0d1b2a; --bg1-rgb: 13,27,42;
+  --bg2: #1b2838;
+  --accent: #d4af37; --accent-rgb: 212,175,55;
+  --accent2: #b8942e;
+  --text: #d4af37;
+  --text-dim: rgba(212,175,55,0.6);
+  --btn-text: #0d1b2a;
+}
+body.theme-navy { --bg1: #0d1b2a; --bg1-rgb: 13,27,42; --bg2: #1b2838; --accent: #d4af37; --accent-rgb: 212,175,55; --accent2: #b8942e; --text: #d4af37; --text-dim: rgba(212,175,55,0.6); --btn-text: #0d1b2a; }
+body.theme-green { --bg1: #0a1f14; --bg1-rgb: 10,31,20; --bg2: #123a22; --accent: #4caf50; --accent-rgb: 76,175,80; --accent2: #388e3c; --text: #4caf50; --text-dim: rgba(76,175,80,0.6); --btn-text: #0a1f14; }
+body.theme-red { --bg1: #1a0808; --bg1-rgb: 26,8,8; --bg2: #2a1010; --accent: #e53935; --accent-rgb: 229,57,53; --accent2: #c62828; --text: #ef9a9a; --text-dim: rgba(239,154,154,0.6); --btn-text: #1a0808; }
+body.theme-cream { --bg1: #1a1810; --bg1-rgb: 26,24,16; --bg2: #2a2418; --accent: #ffe082; --accent-rgb: 255,224,130; --accent2: #ffd54f; --text: #ffe082; --text-dim: rgba(255,224,130,0.6); --btn-text: #1a1810; }
+
 body {
   height: 100vh; overflow: hidden;
-  background: linear-gradient(180deg, #0d1b2a 0%, #1b2838 50%, #0d1b2a 100%);
+  background: linear-gradient(180deg, var(--bg1) 0%, var(--bg2) 50%, var(--bg1) 100%);
   font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
   position: relative;
 }
@@ -27,7 +41,7 @@ body {
 #splash {
   position: fixed; inset: 0; z-index: 100;
   display: flex; flex-direction: column;
-  background: linear-gradient(180deg, #0d1b2a 0%, #1b2838 50%, #0d1b2a 100%);
+  background: linear-gradient(180deg, var(--bg1) 0%, var(--bg2) 50%, var(--bg1) 100%);
   transition: opacity 0.6s ease, transform 0.6s ease;
 }
 #splash.hide {
@@ -52,7 +66,7 @@ body {
   position: absolute; top: 50%; left: 50%;
   width: 200px; height: 200px;
   margin-left: -100px; margin-top: -100px;
-  background: radial-gradient(circle, rgba(212, 175, 55, 0.2), transparent 70%);
+  background: radial-gradient(circle, rgba(var(--accent-rgb), 0.2), transparent 70%);
   border-radius: 50%; z-index: 0;
   animation: glowIn 1s 0.8s ease both, pulse 2s 1.8s ease-in-out infinite;
 }
@@ -70,7 +84,7 @@ body {
   position: absolute; top: 50%; left: 50%;
   width: 80px; height: 80px;
   margin-left: -40px; margin-top: -40px;
-  z-index: 2;
+  z-index: 2; color: var(--accent);
   animation: moonFlyIn 0.9s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
 }
 @keyframes moonFlyIn {
@@ -83,7 +97,7 @@ body {
   position: absolute; top: 50%; left: 50%;
   width: 44px; height: 44px;
   margin-left: 18px; margin-top: -32px;
-  z-index: 3;
+  z-index: 3; color: var(--accent);
   animation: starFlyIn 0.7s 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) both;
 }
 @keyframes starFlyIn {
@@ -96,25 +110,25 @@ body {
   animation: shimmer 3s 1.6s ease-in-out infinite;
 }
 @keyframes shimmer {
-  0%, 100% { filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.3)); }
-  50% { filter: drop-shadow(0 0 20px rgba(212, 175, 55, 0.6)); }
+  0%, 100% { filter: drop-shadow(0 0 8px rgba(var(--accent-rgb), 0.3)); }
+  50% { filter: drop-shadow(0 0 20px rgba(var(--accent-rgb), 0.6)); }
 }
 
 .splash-title {
   font-size: clamp(20px, 5vw, 32px);
-  font-weight: 700; color: #d4af37;
+  font-weight: 700; color: var(--accent);
   letter-spacing: 4px; text-transform: uppercase;
   animation: fadeUp 0.8s 0.6s ease both;
 }
 .splash-divider {
   width: 60px; height: 1px;
-  background: linear-gradient(90deg, transparent, #d4af37, transparent);
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
   margin: 12px auto;
   animation: fadeUp 0.8s 0.7s ease both;
 }
 .splash-sub {
   font-size: clamp(14px, 3vw, 20px);
-  color: rgba(212, 175, 55, 0.6);
+  color: rgba(var(--accent-rgb), 0.6);
   letter-spacing: 6px; text-transform: uppercase;
   font-weight: 300;
   animation: fadeUp 0.8s 0.8s ease both;
@@ -126,7 +140,7 @@ body {
 
 .splash-bar {
   position: absolute; bottom: 0; left: 0; right: 0; height: 4px;
-  background: linear-gradient(90deg, transparent, #d4af37, transparent);
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
   animation: expandBar 3s linear forwards;
 }
 @keyframes expandBar {
@@ -142,7 +156,7 @@ body {
 .bg-star {
   position: absolute;
   width: 6px; height: 6px;
-  background: #d4af37;
+  background: var(--accent);
   clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
   animation: twinkle 1.5s ease-in-out infinite;
 }
@@ -164,10 +178,10 @@ body {
 .top-nav {
   margin: 12px 16px; padding: 0 14px;
   height: 48px; border-radius: 24px;
-  background: linear-gradient(135deg, #d4af37, #b8942e);
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
   display: flex; align-items: center;
   justify-content: space-between;
-  box-shadow: 0 4px 20px rgba(212, 175, 55, 0.3);
+  box-shadow: 0 4px 20px rgba(var(--accent-rgb), 0.3);
   position: relative; z-index: 10;
   transition: background 0.3s, box-shadow 0.3s;
 }
@@ -181,7 +195,7 @@ body {
 }
 .hamburger span {
   display: block; height: 3px; border-radius: 2px;
-  background: #0d1b2a;
+  background: var(--btn-text);
 }
 .nav-right {
   display: flex; flex-direction: column; align-items: center;
@@ -189,11 +203,11 @@ body {
 }
 .nav-title {
   font-size: 15px; font-weight: 700;
-  color: #0d1b2a; letter-spacing: 1.5px;
+  color: var(--btn-text); letter-spacing: 1.5px;
 }
 .nav-sub {
   font-size: 9px; font-weight: 400;
-  color: #0d1b2a; letter-spacing: 6px;
+  color: var(--btn-text); letter-spacing: 6px;
   text-transform: uppercase; opacity: 0.8;
   margin-top: 1px;
 }
@@ -210,7 +224,7 @@ body {
   position: absolute; top: 50%; left: 50%;
   width: 140px; height: 140px;
   margin-left: -70px; margin-top: -70px;
-  background: radial-gradient(circle, rgba(212, 175, 55, 0.15), transparent 70%);
+  background: radial-gradient(circle, rgba(var(--accent-rgb), 0.15), transparent 70%);
   border-radius: 50%; z-index: 0;
   opacity: 0;
 }
@@ -223,13 +237,13 @@ body {
   position: absolute; top: 50%; left: 50%;
   width: 60px; height: 60px;
   margin-left: -30px; margin-top: -30px;
-  z-index: 2; opacity: 0;
+  z-index: 2; opacity: 0; color: var(--accent);
 }
 #homeStar {
   position: absolute; top: 50%; left: 50%;
   width: 34px; height: 34px;
   margin-left: 12px; margin-top: -24px;
-  z-index: 3; opacity: 0;
+  z-index: 3; opacity: 0; color: var(--accent);
 }
 
 /* Fly transition */
@@ -279,7 +293,7 @@ body {
   padding: 11px 8px;
   border-radius: 13px;
   background: rgba(255,255,255,0.05);
-  border: 1px solid rgba(212, 175, 55, 0.15);
+  border: 1px solid rgba(var(--accent-rgb), 0.15);
   cursor: pointer;
   user-select: none;
   position: relative;
@@ -322,7 +336,7 @@ body {
 .prayer-pill .pill-name {
   font-family: 'Noto Nastaliq Urdu', serif;
   font-size: 13px;
-  color: #d4af37;
+  color: var(--accent);
   direction: rtl;
   margin-bottom: 3px;
 }
@@ -347,15 +361,15 @@ body {
   margin: 12px auto 0; padding: 16px 18px;
   border-radius: 50px;
   background: rgba(255,255,255,0.06);
-  border: 1px solid rgba(212, 175, 55, 0.15);
+  border: 1px solid rgba(var(--accent-rgb), 0.15);
   cursor: pointer;
 }
-.menu-row:hover { background: rgba(212, 175, 55, 0.1); }
+.menu-row:hover { background: rgba(var(--accent-rgb), 0.1); }
 .menu-row .circle {
   width: 40px; height: 40px; border-radius: 50%;
-  background: linear-gradient(135deg, #d4af37, #b8942e);
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
   display: flex; align-items: center; justify-content: center;
-  flex-shrink: 0;
+  flex-shrink: 0; color: var(--btn-text);
 }
 .menu-row .circle svg { width: 20px; height: 20px; }
 .menu-row .text { font-size: 14px; font-weight: 500; color: #ccc; letter-spacing: 0.5px; }
@@ -386,7 +400,7 @@ body {
   padding: 10px 14px;
 }
 .surah-row .sep {
-  color: rgba(212, 175, 55, 0.2);
+  color: rgba(var(--accent-rgb), 0.2);
   font-size: 16px; font-weight: 100;
   pointer-events: none;
 }
@@ -396,14 +410,14 @@ body {
   padding: 8px 12px;
   border-radius: 12px;
   background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(212, 175, 55, 0.15);
+  border: 1px solid rgba(var(--accent-rgb), 0.15);
   cursor: pointer;
   user-select: none;
 }
 
 .surah-name {
   font-family: 'Noto Nastaliq Urdu', serif;
-  font-size: 15px; color: #d4af37;
+  font-size: 15px; color: var(--accent);
   direction: rtl;
 }
 #quranToggle.has-active .circle,
@@ -422,9 +436,9 @@ body {
 .icon-bar.show { display: flex; }
 .bar-icon {
   width: 38px; height: 38px; border-radius: 50%;
-  background: linear-gradient(135deg, #d4af37, #b8942e);
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
   display: flex; align-items: center; justify-content: center;
-  cursor: pointer;
+  cursor: pointer; color: var(--btn-text);
 }
 .bar-icon svg { width: 18px; height: 18px; }
 
@@ -461,10 +475,10 @@ body {
   bottom: 0; left: 0; right: 0;
   text-align: center;
   font-size: 11px;
-  color: #d4af37;
+  color: var(--accent);
   padding: 2px 0 4px;
   cursor: pointer;
-  background: linear-gradient(180deg, rgba(13,27,42,0), rgba(13,27,42,0.85) 50%, #0d1b2a);
+  background: linear-gradient(180deg, rgba(var(--bg1-rgb),0), rgba(var(--bg1-rgb),0.85) 50%, var(--bg1));
   user-select: none;
   z-index: 2;
   line-height: 1;
@@ -487,17 +501,17 @@ body {
 .quote-card {
   width: calc(100% - 48px); max-width: 340px;
   margin: 14px auto; padding: 14px 16px;
-  border: 1px solid rgba(212, 175, 55, 0.25);
+  border: 1px solid rgba(var(--accent-rgb), 0.25);
   border-radius: 12px;
   background: rgba(255,255,255,0.03);
 }
 .quote-text {
   font-family: 'Noto Nastaliq Urdu', serif;
-  font-size: 15px; color: #d4af37; text-align: center;
+  font-size: 15px; color: var(--accent); text-align: center;
   direction: rtl; line-height: 1.7;
 }
 .quote-ref {
-  font-size: 11px; color: rgba(212, 175, 55, 0.5);
+  font-size: 11px; color: rgba(var(--accent-rgb), 0.5);
   text-align: center; margin-top: 6px;
   letter-spacing: 1px;
 }
@@ -513,7 +527,7 @@ body {
   gap: 32px;
   padding: 12px 0 30px;
   box-sizing: border-box;
-  background: linear-gradient(180deg, rgba(13,27,42,0.85), #0d1b2a);
+  background: linear-gradient(180deg, rgba(var(--bg1-rgb),0.85), var(--bg1));
   z-index: 50;
 }
 .bottom-btn {
@@ -528,10 +542,11 @@ body {
 .bottom-icon {
   width: 40px; height: 40px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #d4af37, #b8942e);
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
   display: flex;
   align-items: center;
   justify-content: center;
+  color: var(--btn-text);
 }
 .bottom-icon svg { width: 20px; height: 20px; }
 .bottom-label {
@@ -540,6 +555,74 @@ body {
   text-transform: uppercase;
   letter-spacing: 0.8px;
 }
+/* ======== SETTINGS OVERLAY ======== */
+.overlay {
+  position: fixed; inset: 0; z-index: 200;
+  background: rgba(0,0,0,0.7);
+  display: none; align-items: center; justify-content: center;
+}
+.overlay.open { display: flex; }
+.overlay-card {
+  background: var(--bg1);
+  border: 1px solid var(--accent);
+  border-radius: 20px;
+  padding: 28px 24px;
+  max-width: 340px;
+  width: 90%;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+.overlay-title {
+  font-family: 'Noto Nastaliq Urdu', serif;
+  font-size: 18px; font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 20px; text-align: center;
+}
+.set-card { margin-bottom: 20px; }
+.set-card-title {
+  font-size: 13px; font-weight: 700;
+  color: var(--accent); text-transform: uppercase;
+  letter-spacing: 0.5px; margin-bottom: 12px;
+  font-family: 'Segoe UI', sans-serif;
+}
+.set-row {
+  display: flex; align-items: center;
+  gap: 12px; padding: 8px 0;
+  justify-content: space-between;
+}
+.set-label { font-size: 14px; color: var(--accent); }
+.theme-row {
+  display: flex; gap: 10px;
+  justify-content: center; padding: 4px 0;
+}
+.theme-dot {
+  width: 40px; height: 40px; border-radius: 50%;
+  border: 3px solid transparent; cursor: pointer;
+  transition: all 0.2s;
+}
+.theme-dot:hover { border-color: var(--accent); }
+.theme-dot.active { border-color: var(--accent); box-shadow: 0 0 12px var(--accent); }
+.theme-dot-navy { background: linear-gradient(135deg, #0d1b2a, #d4af37); }
+.theme-dot-green { background: linear-gradient(135deg, #0a1f14, #4caf50); }
+.theme-dot-red { background: linear-gradient(135deg, #1a0808, #e53935); }
+.theme-dot-cream { background: linear-gradient(135deg, #1a1810, #ffe082); }
+.lang-toggle {
+  display: flex; border-radius: 999px; overflow: hidden;
+  border: 1px solid var(--accent); cursor: pointer; user-select: none;
+}
+.lang-opt {
+  padding: 6px 18px; font-size: 14px; font-weight: 600;
+  color: var(--accent); transition: all 0.2s;
+}
+.lang-opt.active { background: var(--accent); color: var(--btn-text); }
+.overlay-close {
+  display: block; margin: 16px auto 0;
+  padding: 10px 28px; border: 1px solid var(--accent);
+  border-radius: 999px; background: none;
+  color: var(--accent); font-family: 'Noto Nastaliq Urdu', serif;
+  font-size: 15px; cursor: pointer; transition: all 0.15s;
+}
+.overlay-close:hover { background: var(--accent); color: var(--btn-text); }
 </style>
 </head>
 <body>
@@ -551,11 +634,11 @@ body {
     <div class="logo-container">
       <div class="logo-glow"></div>
       <svg id="splashMoon" class="shimmer" viewBox="0 0 100 100" fill="none">
-        <path d="M55 15 C30 20 20 45 25 70 C30 90 50 95 65 90 C45 85 35 70 35 55 C35 40 42 25 55 15Z" fill="#d4af37" opacity="0.9"/>
+        <path d="M55 15 C30 20 20 45 25 70 C30 90 50 95 65 90 C45 85 35 70 35 55 C35 40 42 25 55 15Z" fill="currentColor" opacity="0.9"/>
         <path d="M50 22 C32 30 24 48 28 66" stroke="rgba(255,255,255,0.15)" stroke-width="1" fill="none"/>
       </svg>
       <svg id="splashStar" class="shimmer" viewBox="0 0 100 100" fill="none">
-        <path d="M70 30 L73 40 L83 40 L75 47 L78 57 L70 50 L62 57 L65 47 L57 40 L67 40Z" fill="#d4af37" opacity="0.9"/>
+        <path d="M70 30 L73 40 L83 40 L75 47 L78 57 L70 50 L62 57 L65 47 L57 40 L67 40Z" fill="currentColor" opacity="0.9"/>
       </svg>
     </div>
   </div>
@@ -575,8 +658,8 @@ body {
       <span></span><span></span><span></span>
     </div>
     <div class="nav-right">
-      <div class="nav-title">ISLAMIC</div>
-      <div class="nav-sub">utility</div>
+      <div class="nav-title" data-lang="islamic">ISLAMIC</div>
+      <div class="nav-sub" data-lang="utility">utility</div>
     </div>
   </div>
 
@@ -584,11 +667,11 @@ body {
     <div id="homeLogo">
       <div class="home-glow" id="homeGlow"></div>
       <svg id="homeMoon" viewBox="0 0 100 100" fill="none">
-        <path d="M55 15 C30 20 20 45 25 70 C30 90 50 95 65 90 C45 85 35 70 35 55 C35 40 42 25 55 15Z" fill="#d4af37" opacity="0.9"/>
+        <path d="M55 15 C30 20 20 45 25 70 C30 90 50 95 65 90 C45 85 35 70 35 55 C35 40 42 25 55 15Z" fill="currentColor" opacity="0.9"/>
         <path d="M50 22 C32 30 24 48 28 66" stroke="rgba(255,255,255,0.15)" stroke-width="1" fill="none"/>
       </svg>
       <svg id="homeStar" viewBox="0 0 100 100" fill="none">
-        <path d="M70 30 L73 40 L83 40 L75 47 L78 57 L70 50 L62 57 L65 47 L57 40 L67 40Z" fill="#d4af37" opacity="0.9"/>
+        <path d="M70 30 L73 40 L83 40 L75 47 L78 57 L70 50 L62 57 L65 47 L57 40 L67 40Z" fill="currentColor" opacity="0.9"/>
       </svg>
     </div>
   </div>
@@ -600,7 +683,7 @@ body {
 
   <div class="icon-bar" id="iconBar">
     <div class="bar-icon" data-section="prayer">
-      <svg viewBox="0 0 24 24" fill="none" stroke="#0d1b2a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
         <circle cx="12" cy="13" r="8"/>
         <path d="M12 9v4l2.5 1.5"/>
         <path d="M12 5V3"/>
@@ -608,14 +691,14 @@ body {
       </svg>
     </div>
     <div class="bar-icon" data-section="dua">
-      <svg viewBox="0 0 24 24" fill="none" stroke="#0d1b2a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
         <path d="M7 10c0-2.5 1-4 2.5-4S12 7.5 12 10c0 3-2 6-2 6s-2-3-2-6z"/>
         <path d="M17 10c0-2.5-1-4-2.5-4S12 7.5 12 10c0 3 2 6 2 6s2-3 2-6z"/>
         <path d="M12 17c-1 1-2 1.5-3 1.5s-2-.5-3-1.5"/>
       </svg>
     </div>
     <div class="bar-icon" data-section="quran">
-      <svg viewBox="0 0 24 24" fill="none" stroke="#0d1b2a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
         <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
         <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
         <path d="M10 6h6"/>
@@ -624,10 +707,10 @@ body {
       </svg>
     </div>
     <div class="bar-icon" data-section="zeyaraat">
-      <svg viewBox="0 0 24 24" fill="none" stroke="#0d1b2a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
         <path d="M4 20V12c0-4.4 3.6-8 8-8s8 3.6 8 8v8"/>
         <path d="M12 4V2"/>
-        <circle cx="12" cy="2" r="1.5" fill="#0d1b2a" stroke="none"/>
+        <circle cx="12" cy="2" r="1.5" fill="currentColor" stroke="none"/>
       </svg>
     </div>
   </div>
@@ -641,7 +724,7 @@ body {
         <path d="M10 3h4"/>
       </svg>
     </div>
-    <span class="text">Adhan Scheduler</span>
+    <span class="text" data-lang="adhan">Adhan Scheduler</span>
   </div>
   <div class="prayer-wrapper">
     <div class="prayer-dropdown" id="prayerDropdown">
@@ -650,31 +733,31 @@ body {
           <div class="pill-indicator"></div>
           <div class="pill-name">فجر</div>
           <div class="pill-time" id="tFajr">05:12</div>
-          <div class="pill-label">Fajr</div>
+          <div class="pill-label" data-lang="fajr">Fajr</div>
         </div>
         <div class="prayer-pill" data-prayer="dhuhr">
           <div class="pill-indicator"></div>
           <div class="pill-name">ظہر</div>
           <div class="pill-time" id="tDhuhr">12:30</div>
-          <div class="pill-label">Dhuhr</div>
+          <div class="pill-label" data-lang="dhuhr">Dhuhr</div>
         </div>
         <div class="prayer-pill" data-prayer="asr">
           <div class="pill-indicator"></div>
           <div class="pill-name">عصر</div>
           <div class="pill-time" id="tAsr">15:45</div>
-          <div class="pill-label">Asr</div>
+          <div class="pill-label" data-lang="asr">Asr</div>
         </div>
         <div class="prayer-pill" data-prayer="maghrib">
           <div class="pill-indicator"></div>
           <div class="pill-name">مغرب</div>
           <div class="pill-time" id="tMaghrib">18:20</div>
-          <div class="pill-label">Maghrib</div>
+          <div class="pill-label" data-lang="maghrib">Maghrib</div>
         </div>
         <div class="prayer-pill" data-prayer="isha">
           <div class="pill-indicator"></div>
           <div class="pill-name">عشاء</div>
           <div class="pill-time" id="tIsha">19:50</div>
-          <div class="pill-label">Isha</div>
+          <div class="pill-label" data-lang="isha">Isha</div>
         </div>
         <div class="prayer-pill reciter-pill" id="adhanReciterBtn">
           <div class="pill-indicator" id="reciterDot"></div>
@@ -694,7 +777,7 @@ body {
         <path d="M12 17c-1 1-2 1.5-3 1.5s-2-.5-3-1.5"/>
       </svg>
     </div>
-    <span class="text">Maqbool Duaen</span>
+    <span class="text" data-lang="dua">Maqbool Duaen</span>
   </div>
   <div class="prayer-wrapper">
     <div class="prayer-dropdown" id="duaDropdown">
@@ -778,7 +861,7 @@ body {
         <path d="M10 14h4"/>
       </svg>
     </div>
-    <span class="text">Quran Recitation</span>
+    <span class="text" data-lang="quran">Quran Recitation</span>
   </div>
   <div class="prayer-wrapper">
     <div class="prayer-dropdown" id="quranDropdown">
@@ -844,7 +927,7 @@ body {
         <circle cx="12" cy="2" r="1.5" fill="#fff" stroke="none"/>
       </svg>
     </div>
-    <span class="text">Zeyaraat</span>
+    <span class="text" data-lang="zeyaraat">Zeyaraat</span>
   </div>
   <div class="prayer-wrapper">
     <div class="prayer-dropdown" id="zeyaraatDropdown">
@@ -986,36 +1069,64 @@ body {
   </div>
 </div>
 
+<!-- ======== SETTINGS OVERLAY ======== -->
+<div class="overlay" id="settingsOverlay">
+  <div class="overlay-card">
+    <div class="overlay-title" data-lang="settings">ترتیبات</div>
+    <div class="set-card">
+      <div class="set-card-title">Theme</div>
+      <div class="theme-row" id="themePicker">
+        <div class="theme-dot theme-dot-navy" data-theme="navy" onclick="setTheme('navy')"></div>
+        <div class="theme-dot theme-dot-green" data-theme="green" onclick="setTheme('green')"></div>
+        <div class="theme-dot theme-dot-red" data-theme="red" onclick="setTheme('red')"></div>
+        <div class="theme-dot theme-dot-cream" data-theme="cream" onclick="setTheme('cream')"></div>
+      </div>
+    </div>
+    <div class="set-card">
+      <div class="set-card-title" data-lang="language">Language / زبان</div>
+      <div class="set-row">
+        <span class="set-label">English</span>
+        <div class="lang-toggle" id="langToggle" onclick="toggleLang()">
+          <span class="lang-opt" data-lang-val="en">EN</span>
+          <span class="lang-opt" data-lang-val="ur">UR</span>
+        </div>
+        <span class="set-label">اردو</span>
+      </div>
+    </div>
+    <button class="overlay-close" onclick="closeSettings()" data-lang="close">بند کریں</button>
+  </div>
+</div>
+
 <!-- ======== BOTTOM BAR ======== -->
 <div class="bottom-bar">
   <div class="bottom-btn" onclick="exitApp()">
     <div class="bottom-icon">
-      <svg viewBox="0 0 24 24" fill="none" stroke="#0d1b2a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
         <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
         <polyline points="10 17 15 12 10 7"/>
         <line x1="15" y1="12" x2="3" y2="12"/>
       </svg>
     </div>
-    <span class="bottom-label">EXIT</span>
+    <span class="bottom-label" data-lang="exit">EXIT</span>
   </div>
   <div class="bottom-btn" onclick="openSettings()">
     <div class="bottom-icon">
-      <svg viewBox="0 0 24 24" fill="none" stroke="#0d1b2a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
         <circle cx="12" cy="12" r="3"/>
         <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
       </svg>
     </div>
-    <span class="bottom-label">Setting</span>
+    <span class="bottom-label" data-lang="setting">Setting</span>
   </div>
   <div class="bottom-btn" onclick="shareApp()">
     <div class="bottom-icon">
-      <svg viewBox="0 0 24 24" fill="none" stroke="#0d1b2a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
         <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/>
         <polyline points="16 6 12 2 8 6"/>
         <line x1="12" y1="2" x2="12" y2="15"/>
       </svg>
     </div>
-    <span class="bottom-label">Share</span>
+    <span class="bottom-label" data-lang="share">Share</span>
   </div>
 </div>
 
@@ -1502,8 +1613,62 @@ function exitApp() {
   }
 }
 function openSettings() {
-  console.log('Settings');
+  document.getElementById('settingsOverlay').classList.add('open');
 }
+function closeSettings() {
+  document.getElementById('settingsOverlay').classList.remove('open');
+}
+
+// --- THEME ---
+function setTheme(name) {
+  document.body.className = 'theme-' + name;
+  localStorage.setItem('appTheme', name);
+  document.querySelectorAll('.theme-dot').forEach(function(d) {
+    d.classList.toggle('active', d.getAttribute('data-theme') === name);
+  });
+  document.querySelector('meta[name="theme-color"]').content = getComputedStyle(document.body).getPropertyValue('--bg1').trim();
+}
+
+// --- LANGUAGE ---
+var lang = localStorage.getItem('appLang') || 'ur';
+var strings = {
+  settings: { en: 'Settings', ur: 'ترتیبات' },
+  language: { en: 'Language', ur: 'زبان' },
+  close: { en: 'Close', ur: 'بند کریں' },
+  exit: { en: 'Exit', ur: 'باہر نکلیں' },
+  setting: { en: 'Settings', ur: 'ترتیبات' },
+  share: { en: 'Share', ur: 'شیئر کریں' },
+  adhan: { en: 'Adhan Scheduler', ur: 'اذان شیڈولر' },
+  dua: { en: 'Prayers', ur: 'مقبول دعائیں' },
+  quran: { en: 'Quran Recitation', ur: 'قرآن تلاوت' },
+  zeyaraat: { en: 'Ziyarat', ur: 'زیارات' },
+  islamic: { en: 'ISLAMIC', ur: 'اسلامک' },
+  utility: { en: 'utility', ur: 'یوٹیلیٹی' },
+  fajr: { en: 'Fajr', ur: 'فجر' },
+  dhuhr: { en: 'Dhuhr', ur: 'ظہر' },
+  asr: { en: 'Asr', ur: 'عصر' },
+  maghrib: { en: 'Maghrib', ur: 'مغرب' },
+  isha: { en: 'Isha', ur: 'عشاء' }
+};
+
+function applyLang(l) {
+  lang = l;
+  localStorage.setItem('appLang', l);
+  document.getElementById('langToggle').querySelectorAll('.lang-opt').forEach(function(el) {
+    el.classList.toggle('active', el.getAttribute('data-lang-val') === l);
+  });
+  document.documentElement.dir = l === 'ur' ? 'rtl' : 'ltr';
+  document.documentElement.lang = l;
+  document.querySelectorAll('[data-lang]').forEach(function(el) {
+    var key = el.getAttribute('data-lang');
+    if (strings[key]) el.textContent = strings[key][l];
+  });
+}
+
+function toggleLang() {
+  applyLang(lang === 'ur' ? 'en' : 'ur');
+}
+
 function shareApp() {
   if (navigator.share) {
     navigator.share({ title: 'Islamic Utility', text: 'بے شک ہم اللہ کے لیے ہیں اور اسی کی طرف لوٹ کر جانے والے ہیں', url: location.href });
@@ -1523,6 +1688,13 @@ function setDailyQuote() {
   }
 }
 setDailyQuote();
+
+// --- INIT SETTINGS ---
+(function() {
+  var savedTheme = localStorage.getItem('appTheme') || 'navy';
+  setTheme(savedTheme);
+  applyLang(lang);
+})();
 </script>
 </body>
 </html>
