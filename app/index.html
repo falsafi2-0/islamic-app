@@ -1,0 +1,1528 @@
+<!DOCTYPE html>
+<html lang="en" style="background:#0d1b2a">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0d1b2a">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<link rel="apple-touch-icon" href="images/icon-192.png">
+<title>Islamic Utility</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;700&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
+a, button, .clickable, [onclick] { outline: none; -webkit-touch-callout: none; user-select: none; }
+a:focus, button:focus, .clickable:focus, [onclick]:focus { outline: none; }
+
+body {
+  height: 100vh; overflow: hidden;
+  background: linear-gradient(180deg, #0d1b2a 0%, #1b2838 50%, #0d1b2a 100%);
+  font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+  position: relative;
+}
+#home::-webkit-scrollbar { display: none; }
+#home { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* ======== SPLASH ======== */
+#splash {
+  position: fixed; inset: 0; z-index: 100;
+  display: flex; flex-direction: column;
+  background: linear-gradient(180deg, #0d1b2a 0%, #1b2838 50%, #0d1b2a 100%);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+#splash.hide {
+  opacity: 0; transform: scale(1.05);
+  pointer-events: none;
+}
+
+.splash-top {
+  flex: 1; display: flex; align-items: center; justify-content: center;
+}
+
+.splash-bottom {
+  height: 30vh; display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+}
+
+.logo-container {
+  position: relative; width: 150px; height: 150px;
+}
+
+.logo-glow {
+  position: absolute; top: 50%; left: 50%;
+  width: 200px; height: 200px;
+  margin-left: -100px; margin-top: -100px;
+  background: radial-gradient(circle, rgba(212, 175, 55, 0.2), transparent 70%);
+  border-radius: 50%; z-index: 0;
+  animation: glowIn 1s 0.8s ease both, pulse 2s 1.8s ease-in-out infinite;
+}
+
+@keyframes glowIn {
+  from { opacity: 0; transform: scale(0.3); }
+  to { opacity: 1; transform: scale(1); }
+}
+@keyframes pulse {
+  0%, 100% { transform: scale(1); opacity: 0.5; }
+  50% { transform: scale(1.3); opacity: 1; }
+}
+
+#splashMoon {
+  position: absolute; top: 50%; left: 50%;
+  width: 80px; height: 80px;
+  margin-left: -40px; margin-top: -40px;
+  z-index: 2;
+  animation: moonFlyIn 0.9s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+@keyframes moonFlyIn {
+  0% { opacity: 0; transform: translateY(-120px) scale(0.3); }
+  60% { opacity: 1; transform: translateY(8px) scale(1.05); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+#splashStar {
+  position: absolute; top: 50%; left: 50%;
+  width: 44px; height: 44px;
+  margin-left: 18px; margin-top: -32px;
+  z-index: 3;
+  animation: starFlyIn 0.7s 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+@keyframes starFlyIn {
+  0% { opacity: 0; transform: translate(50px, -50px) scale(0); }
+  60% { opacity: 1; transform: translate(-4px, 4px) scale(1.15); }
+  100% { opacity: 1; transform: translate(0, 0) scale(1); }
+}
+
+.shimmer {
+  animation: shimmer 3s 1.6s ease-in-out infinite;
+}
+@keyframes shimmer {
+  0%, 100% { filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.3)); }
+  50% { filter: drop-shadow(0 0 20px rgba(212, 175, 55, 0.6)); }
+}
+
+.splash-title {
+  font-size: clamp(20px, 5vw, 32px);
+  font-weight: 700; color: #d4af37;
+  letter-spacing: 4px; text-transform: uppercase;
+  animation: fadeUp 0.8s 0.6s ease both;
+}
+.splash-divider {
+  width: 60px; height: 1px;
+  background: linear-gradient(90deg, transparent, #d4af37, transparent);
+  margin: 12px auto;
+  animation: fadeUp 0.8s 0.7s ease both;
+}
+.splash-sub {
+  font-size: clamp(14px, 3vw, 20px);
+  color: rgba(212, 175, 55, 0.6);
+  letter-spacing: 6px; text-transform: uppercase;
+  font-weight: 300;
+  animation: fadeUp 0.8s 0.8s ease both;
+}
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.splash-bar {
+  position: absolute; bottom: 0; left: 0; right: 0; height: 4px;
+  background: linear-gradient(90deg, transparent, #d4af37, transparent);
+  animation: expandBar 3s linear forwards;
+}
+@keyframes expandBar {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+/* ======== BACKGROUND STARS ======== */
+.bg-stars {
+  top: 0; left: 0; right: 0;
+  height: 35vh; pointer-events: none; z-index: 0;
+}
+.bg-star {
+  position: absolute;
+  width: 6px; height: 6px;
+  background: #d4af37;
+  clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+  animation: twinkle 1.5s ease-in-out infinite;
+}
+@keyframes twinkle {
+  0%, 100% { opacity: 0.2; transform: scale(0.6); }
+  50% { opacity: 1; transform: scale(1); }
+}
+
+/* ======== HOME ======== */
+#home {
+  position: fixed; inset: 0; z-index: 1;
+  opacity: 0; transition: opacity 0.5s ease;
+  display: flex; flex-direction: column;
+  overflow-y: scroll;
+}
+#home.show { opacity: 1; }
+
+/* Top Nav */
+.top-nav {
+  margin: 12px 16px; padding: 0 14px;
+  height: 48px; border-radius: 24px;
+  background: linear-gradient(135deg, #d4af37, #b8942e);
+  display: flex; align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 4px 20px rgba(212, 175, 55, 0.3);
+  position: relative; z-index: 10;
+  transition: background 0.3s, box-shadow 0.3s;
+}
+#prayerToggle.has-armed .circle {
+  background: linear-gradient(135deg, #4caf50, #388e3c);
+}
+.hamburger {
+  width: 28px; height: 20px;
+  display: flex; flex-direction: column; justify-content: space-between;
+  cursor: pointer;
+}
+.hamburger span {
+  display: block; height: 3px; border-radius: 2px;
+  background: #0d1b2a;
+}
+.nav-right {
+  display: flex; flex-direction: column; align-items: center;
+  line-height: 1;
+}
+.nav-title {
+  font-size: 15px; font-weight: 700;
+  color: #0d1b2a; letter-spacing: 1.5px;
+}
+.nav-sub {
+  font-size: 9px; font-weight: 400;
+  color: #0d1b2a; letter-spacing: 6px;
+  text-transform: uppercase; opacity: 0.8;
+  margin-top: 1px;
+}
+
+/* Logo area */
+.home-logo-area {
+  display: flex; flex-direction: column;
+  align-items: center; padding-top: 40px;
+}
+#homeLogo {
+  position: relative; width: 100px; height: 100px;
+}
+.home-glow {
+  position: absolute; top: 50%; left: 50%;
+  width: 140px; height: 140px;
+  margin-left: -70px; margin-top: -70px;
+  background: radial-gradient(circle, rgba(212, 175, 55, 0.15), transparent 70%);
+  border-radius: 50%; z-index: 0;
+  opacity: 0;
+}
+.home-glow.fly-in {
+  opacity: 1;
+  animation: pulse 2s 0.8s ease-in-out infinite;
+}
+
+#homeMoon {
+  position: absolute; top: 50%; left: 50%;
+  width: 60px; height: 60px;
+  margin-left: -30px; margin-top: -30px;
+  z-index: 2; opacity: 0;
+}
+#homeStar {
+  position: absolute; top: 50%; left: 50%;
+  width: 34px; height: 34px;
+  margin-left: 12px; margin-top: -24px;
+  z-index: 3; opacity: 0;
+}
+
+/* Fly transition */
+#splashMoon.fly-out {
+  animation: flyToHome 0.6s 0.1s ease-in-out forwards;
+}
+#splashStar.fly-out {
+  animation: flyToHomeStar 0.6s 0.15s ease-in-out forwards;
+}
+#homeMoon.fly-in {
+  opacity: 1;
+  animation: flyFromSplash 0.6s 0.1s ease-in-out both;
+}
+#homeStar.fly-in {
+  opacity: 1;
+  animation: flyFromSplashStar 0.6s 0.15s ease-in-out both;
+}
+
+@keyframes flyToHome {
+  0% { transform: translateY(0) scale(1); opacity: 1; }
+  100% { transform: translateY(calc(-50vh + 140px)) scale(0.75); opacity: 0; }
+}
+@keyframes flyToHomeStar {
+  0% { transform: translate(0, 0) scale(1); opacity: 1; }
+  100% { transform: translate(0, calc(-50vh + 140px)) scale(0.77); opacity: 0; }
+}
+@keyframes flyFromSplash {
+  0% { transform: translateY(calc(50vh - 140px)) scale(1.33); opacity: 0; }
+  100% { transform: translateY(0) scale(1); opacity: 1; }
+}
+@keyframes flyFromSplashStar {
+  0% { transform: translate(0, calc(50vh - 140px)) scale(1.29); opacity: 0; }
+  100% { transform: translate(0, 0) scale(1); opacity: 1; }
+}
+
+/* Prayer rows as pills */
+.prayer-pills {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  padding: 11px;
+}
+.prayer-pill {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 11px 8px;
+  border-radius: 13px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(212, 175, 55, 0.15);
+  cursor: pointer;
+  user-select: none;
+  position: relative;
+}
+
+.prayer-pill.armed {
+  background: rgba(76, 175, 80, 0.1);
+  border-color: #4caf50;
+  box-shadow: 0 0 12px rgba(76, 175, 80, 0.25);
+}
+.prayer-pill.playing {
+  box-shadow: 0 0 20px rgba(76, 175, 80, 0.5);
+  border-color: #66bb6a;
+}
+.prayer-pill .pill-indicator {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: transparent;
+  position: absolute;
+  top: 8px; right: 8px;
+}
+.reciter-pill {
+  position: relative;
+}
+.reciter-pill .pill-indicator.active {
+  background: #4caf50;
+  box-shadow: 0 0 6px #4caf50;
+}
+.reciter-panel {
+  display: none;
+  width: 100%;
+}
+.reciter-panel.open {
+  display: block;
+}
+.prayer-pill.armed .pill-indicator {
+  background: #4caf50;
+  box-shadow: 0 0 6px #4caf50;
+}
+.prayer-pill .pill-name {
+  font-family: 'Noto Nastaliq Urdu', serif;
+  font-size: 13px;
+  color: #d4af37;
+  direction: rtl;
+  margin-bottom: 3px;
+}
+.prayer-pill .pill-time {
+  font-size: 14px;
+  color: #fff;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+.prayer-pill .pill-label {
+  font-size: 8px;
+  color: rgba(255,255,255,0.35);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-top: 1px;
+}
+
+/* Menu rows */
+.menu-row {
+  display: flex; align-items: center; gap: 14px;
+  width: calc(100% - 48px); max-width: 340px;
+  margin: 12px auto 0; padding: 16px 18px;
+  border-radius: 50px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(212, 175, 55, 0.15);
+  cursor: pointer;
+}
+.menu-row:hover { background: rgba(212, 175, 55, 0.1); }
+.menu-row .circle {
+  width: 40px; height: 40px; border-radius: 50%;
+  background: linear-gradient(135deg, #d4af37, #b8942e);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.menu-row .circle svg { width: 20px; height: 20px; }
+.menu-row .text { font-size: 14px; font-weight: 500; color: #ccc; letter-spacing: 0.5px; }
+
+/* Prayer wrapper */
+.prayer-wrapper {
+  display: flex; flex-direction: column; align-items: center;
+  width: calc(100% - 48px); max-width: 340px;
+  margin: 0 auto;
+}
+.prayer-wrapper:has(.prayer-dropdown.scrollable) {
+  flex: 1;
+  min-height: 0;
+  width: calc(100% - 48px);
+  max-width: 340px;
+  position: relative;
+}
+.prayer-wrapper .menu-row { width: 100%; margin: 0; }
+.prayer-dropdown {
+  width: 90%; overflow: hidden;
+  max-height: 0; opacity: 0;
+}
+.prayer-dropdown.open { opacity: 1; }
+.surah-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px 14px;
+}
+.surah-row .sep {
+  color: rgba(212, 175, 55, 0.2);
+  font-size: 16px; font-weight: 100;
+  pointer-events: none;
+}
+.surah-row {
+  display: flex; align-items: center; justify-content: space-between;
+  direction: rtl;
+  padding: 8px 12px;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(212, 175, 55, 0.15);
+  cursor: pointer;
+  user-select: none;
+}
+
+.surah-name {
+  font-family: 'Noto Nastaliq Urdu', serif;
+  font-size: 15px; color: #d4af37;
+  direction: rtl;
+}
+#quranToggle.has-active .circle,
+#zeyaraatToggle.has-active .circle,
+#duaToggle.has-active .circle {
+  background: linear-gradient(135deg, #4caf50, #388e3c);
+}
+
+/* Icon bar for collapsed sections */
+.icon-bar {
+  display: none;
+  justify-content: center; gap: 12px;
+  width: calc(100% - 48px); max-width: 340px;
+  margin: 0 auto; padding: 6px 0;
+}
+.icon-bar.show { display: flex; }
+.bar-icon {
+  width: 38px; height: 38px; border-radius: 50%;
+  background: linear-gradient(135deg, #d4af37, #b8942e);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+}
+.bar-icon svg { width: 18px; height: 18px; }
+
+/* Active section only */
+.menu-row, .prayer-wrapper, .quote-card {
+  transition: opacity 0.2s ease;
+}
+.menu-row.section-hidden, .prayer-wrapper.section-hidden, .quote-card.section-hidden {
+  max-height: 0 !important;
+  opacity: 0;
+  pointer-events: none;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  overflow: hidden;
+}
+.menu-row { max-height: 100px; }
+.prayer-wrapper { max-height: 800px; }
+.quote-card { max-height: 150px; }
+
+/* Scrollable dropdown */
+.prayer-dropdown.scrollable {
+  height: 100%;
+  max-height: none;
+  overflow-y: auto;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.prayer-dropdown.scrollable::-webkit-scrollbar { display: none; }
+
+/* Scroll arrow */
+.scroll-arrow {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  text-align: center;
+  font-size: 11px;
+  color: #d4af37;
+  padding: 2px 0 4px;
+  cursor: pointer;
+  background: linear-gradient(180deg, rgba(13,27,42,0), rgba(13,27,42,0.85) 50%, #0d1b2a);
+  user-select: none;
+  z-index: 2;
+  line-height: 1;
+  pointer-events: auto;
+}
+
+.speaker-icon {
+  cursor: pointer; flex-shrink: 0;
+  width: 26px; height: 22px;
+  display: flex; align-items: center; justify-content: center;
+}
+.speaker-icon svg {
+  width: 20px; height: 20px; stroke: rgba(255,255,255,0.3);
+  transition: stroke 0.2s;
+}
+.speaker-icon.active svg {
+  stroke: #4caf50;
+}
+
+.quote-card {
+  width: calc(100% - 48px); max-width: 340px;
+  margin: 14px auto; padding: 14px 16px;
+  border: 1px solid rgba(212, 175, 55, 0.25);
+  border-radius: 12px;
+  background: rgba(255,255,255,0.03);
+}
+.quote-text {
+  font-family: 'Noto Nastaliq Urdu', serif;
+  font-size: 15px; color: #d4af37; text-align: center;
+  direction: rtl; line-height: 1.7;
+}
+.quote-ref {
+  font-size: 11px; color: rgba(212, 175, 55, 0.5);
+  text-align: center; margin-top: 6px;
+  letter-spacing: 1px;
+}
+
+/* ======== BOTTOM BAR ======== */
+.bottom-bar {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  height: 90px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 32px;
+  padding: 12px 0 30px;
+  box-sizing: border-box;
+  background: linear-gradient(180deg, rgba(13,27,42,0.85), #0d1b2a);
+  z-index: 50;
+}
+.bottom-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  cursor: pointer;
+  user-select: none;
+}
+.bottom-btn:active { opacity: 0.7; }
+.bottom-icon {
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #d4af37, #b8942e);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.bottom-icon svg { width: 20px; height: 20px; }
+.bottom-label {
+  font-size: 10px;
+  color: rgba(255,255,255,0.45);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+</style>
+</head>
+<body>
+
+<!-- ======== SPLASH ======== -->
+<div id="splash">
+  <div class="bg-stars" id="splashStars" style="position:absolute;"></div>
+  <div class="splash-top">
+    <div class="logo-container">
+      <div class="logo-glow"></div>
+      <svg id="splashMoon" class="shimmer" viewBox="0 0 100 100" fill="none">
+        <path d="M55 15 C30 20 20 45 25 70 C30 90 50 95 65 90 C45 85 35 70 35 55 C35 40 42 25 55 15Z" fill="#d4af37" opacity="0.9"/>
+        <path d="M50 22 C32 30 24 48 28 66" stroke="rgba(255,255,255,0.15)" stroke-width="1" fill="none"/>
+      </svg>
+      <svg id="splashStar" class="shimmer" viewBox="0 0 100 100" fill="none">
+        <path d="M70 30 L73 40 L83 40 L75 47 L78 57 L70 50 L62 57 L65 47 L57 40 L67 40Z" fill="#d4af37" opacity="0.9"/>
+      </svg>
+    </div>
+  </div>
+  <div class="splash-bottom">
+    <div class="splash-title">Islamic Utility</div>
+    <div class="splash-divider"></div>
+    <div class="splash-sub">Qallim</div>
+  </div>
+  <div class="splash-bar"></div>
+</div>
+
+<!-- ======== HOME ======== -->
+<div id="home" style="bottom:90px">
+  <div class="bg-stars" id="homeStars" style="position:fixed;z-index:0;"></div>
+  <div class="top-nav" style="position:relative;z-index:1;">
+    <div class="hamburger">
+      <span></span><span></span><span></span>
+    </div>
+    <div class="nav-right">
+      <div class="nav-title">ISLAMIC</div>
+      <div class="nav-sub">utility</div>
+    </div>
+  </div>
+
+  <div class="home-logo-area">
+    <div id="homeLogo">
+      <div class="home-glow" id="homeGlow"></div>
+      <svg id="homeMoon" viewBox="0 0 100 100" fill="none">
+        <path d="M55 15 C30 20 20 45 25 70 C30 90 50 95 65 90 C45 85 35 70 35 55 C35 40 42 25 55 15Z" fill="#d4af37" opacity="0.9"/>
+        <path d="M50 22 C32 30 24 48 28 66" stroke="rgba(255,255,255,0.15)" stroke-width="1" fill="none"/>
+      </svg>
+      <svg id="homeStar" viewBox="0 0 100 100" fill="none">
+        <path d="M70 30 L73 40 L83 40 L75 47 L78 57 L70 50 L62 57 L65 47 L57 40 L67 40Z" fill="#d4af37" opacity="0.9"/>
+      </svg>
+    </div>
+  </div>
+
+  <div class="quote-card">
+    <div class="quote-text">بے شک ہم اللہ کے لیے ہیں اور اسی کی طرف لوٹ کر جانے والے ہیں</div>
+    <div class="quote-ref">سورۃ البقرہ: 156</div>
+  </div>
+
+  <div class="icon-bar" id="iconBar">
+    <div class="bar-icon" data-section="prayer">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#0d1b2a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="13" r="8"/>
+        <path d="M12 9v4l2.5 1.5"/>
+        <path d="M12 5V3"/>
+        <path d="M10 3h4"/>
+      </svg>
+    </div>
+    <div class="bar-icon" data-section="dua">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#0d1b2a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M7 10c0-2.5 1-4 2.5-4S12 7.5 12 10c0 3-2 6-2 6s-2-3-2-6z"/>
+        <path d="M17 10c0-2.5-1-4-2.5-4S12 7.5 12 10c0 3 2 6 2 6s2-3 2-6z"/>
+        <path d="M12 17c-1 1-2 1.5-3 1.5s-2-.5-3-1.5"/>
+      </svg>
+    </div>
+    <div class="bar-icon" data-section="quran">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#0d1b2a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+        <path d="M10 6h6"/>
+        <path d="M10 10h6"/>
+        <path d="M10 14h4"/>
+      </svg>
+    </div>
+    <div class="bar-icon" data-section="zeyaraat">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#0d1b2a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4 20V12c0-4.4 3.6-8 8-8s8 3.6 8 8v8"/>
+        <path d="M12 4V2"/>
+        <circle cx="12" cy="2" r="1.5" fill="#0d1b2a" stroke="none"/>
+      </svg>
+    </div>
+  </div>
+
+  <div class="menu-row" id="prayerToggle">
+    <div class="circle">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="13" r="8"/>
+        <path d="M12 9v4l2.5 1.5"/>
+        <path d="M12 5V3"/>
+        <path d="M10 3h4"/>
+      </svg>
+    </div>
+    <span class="text">Adhan Scheduler</span>
+  </div>
+  <div class="prayer-wrapper">
+    <div class="prayer-dropdown" id="prayerDropdown">
+      <div class="prayer-pills" id="prayerBody">
+        <div class="prayer-pill" data-prayer="fajr">
+          <div class="pill-indicator"></div>
+          <div class="pill-name">فجر</div>
+          <div class="pill-time" id="tFajr">05:12</div>
+          <div class="pill-label">Fajr</div>
+        </div>
+        <div class="prayer-pill" data-prayer="dhuhr">
+          <div class="pill-indicator"></div>
+          <div class="pill-name">ظہر</div>
+          <div class="pill-time" id="tDhuhr">12:30</div>
+          <div class="pill-label">Dhuhr</div>
+        </div>
+        <div class="prayer-pill" data-prayer="asr">
+          <div class="pill-indicator"></div>
+          <div class="pill-name">عصر</div>
+          <div class="pill-time" id="tAsr">15:45</div>
+          <div class="pill-label">Asr</div>
+        </div>
+        <div class="prayer-pill" data-prayer="maghrib">
+          <div class="pill-indicator"></div>
+          <div class="pill-name">مغرب</div>
+          <div class="pill-time" id="tMaghrib">18:20</div>
+          <div class="pill-label">Maghrib</div>
+        </div>
+        <div class="prayer-pill" data-prayer="isha">
+          <div class="pill-indicator"></div>
+          <div class="pill-name">عشاء</div>
+          <div class="pill-time" id="tIsha">19:50</div>
+          <div class="pill-label">Isha</div>
+        </div>
+        <div class="prayer-pill reciter-pill" id="adhanReciterBtn">
+          <div class="pill-indicator" id="reciterDot"></div>
+          <div class="pill-name">...</div>
+        </div>
+      </div>
+      <div class="reciter-panel" id="reciterPanel">
+        <div class="surah-list" id="reciterList"></div>
+      </div>
+    </div>
+  </div>
+  <div class="menu-row" id="duaToggle">
+    <div class="circle">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M7 10c0-2.5 1-4 2.5-4S12 7.5 12 10c0 3-2 6-2 6s-2-3-2-6z"/>
+        <path d="M17 10c0-2.5-1-4-2.5-4S12 7.5 12 10c0 3 2 6 2 6s2-3 2-6z"/>
+        <path d="M12 17c-1 1-2 1.5-3 1.5s-2-.5-3-1.5"/>
+      </svg>
+    </div>
+    <span class="text">Maqbool Duaen</span>
+  </div>
+  <div class="prayer-wrapper">
+    <div class="prayer-dropdown" id="duaDropdown">
+      <div class="surah-list">
+        <div class="surah-row" data-dua="kumail">
+          <span class="surah-name">دعائے کمیل</span>
+          <span class="sep">|</span>
+          <span class="speaker-icon" data-dua="kumail">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 10v4h3l4 4V6l-4 4H4z"/>
+              <path d="M14 8.5a3 3 0 0 1 0 7"/>
+              <path d="M17 6a6 6 0 0 1 0 12"/>
+            </svg>
+          </span>
+        </div>
+        <div class="surah-row" data-dua="tawassul">
+          <span class="surah-name">دعائے توصل</span>
+          <span class="sep">|</span>
+          <span class="speaker-icon" data-dua="tawassul">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 10v4h3l4 4V6l-4 4H4z"/>
+              <path d="M14 8.5a3 3 0 0 1 0 7"/>
+              <path d="M17 6a6 6 0 0 1 0 12"/>
+            </svg>
+          </span>
+        </div>
+        <div class="surah-row" data-dua="abuhamza">
+          <span class="surah-name">دعائے ابو حمزہ</span>
+          <span class="sep">|</span>
+          <span class="speaker-icon" data-dua="abuhamza">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 10v4h3l4 4V6l-4 4H4z"/>
+              <path d="M14 8.5a3 3 0 0 1 0 7"/>
+              <path d="M17 6a6 6 0 0 1 0 12"/>
+            </svg>
+          </span>
+        </div>
+        <div class="surah-row" data-dua="salman">
+          <span class="surah-name">دعائے سلمان فارسی</span>
+          <span class="sep">|</span>
+          <span class="speaker-icon" data-dua="salman">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 10v4h3l4 4V6l-4 4H4z"/>
+              <path d="M14 8.5a3 3 0 0 1 0 7"/>
+              <path d="M17 6a6 6 0 0 1 0 12"/>
+            </svg>
+          </span>
+        </div>
+        <div class="surah-row" data-dua="sabah">
+          <span class="surah-name">دعائے صباح</span>
+          <span class="sep">|</span>
+          <span class="speaker-icon" data-dua="sabah">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 10v4h3l4 4V6l-4 4H4z"/>
+              <path d="M14 8.5a3 3 0 0 1 0 7"/>
+              <path d="M17 6a6 6 0 0 1 0 12"/>
+            </svg>
+          </span>
+        </div>
+        <div class="surah-row" data-dua="arafa">
+          <span class="surah-name">دعائے عرفہ</span>
+          <span class="sep">|</span>
+          <span class="speaker-icon" data-dua="arafa">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 10v4h3l4 4V6l-4 4H4z"/>
+              <path d="M14 8.5a3 3 0 0 1 0 7"/>
+              <path d="M17 6a6 6 0 0 1 0 12"/>
+            </svg>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="menu-row" id="quranToggle">
+    <div class="circle">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+        <path d="M10 6h6"/>
+        <path d="M10 10h6"/>
+        <path d="M10 14h4"/>
+      </svg>
+    </div>
+    <span class="text">Quran Recitation</span>
+  </div>
+  <div class="prayer-wrapper">
+    <div class="prayer-dropdown" id="quranDropdown">
+      <div class="surah-list">
+        <div class="surah-row" data-surah="room">
+          <span class="surah-name">سورہ روم</span>
+          <span class="speaker-icon" data-surah="room">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 10v4h3l4 4V6l-4 4H4z"/>
+              <path d="M14 8.5a3 3 0 0 1 0 7"/>
+              <path d="M17 6a6 6 0 0 1 0 12"/>
+            </svg>
+          </span>
+        </div>
+        <div class="surah-row" data-surah="dakhan">
+          <span class="surah-name">سورہ دخان</span>
+          <span class="speaker-icon" data-surah="dakhan">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 10v4h3l4 4V6l-4 4H4z"/>
+              <path d="M14 8.5a3 3 0 0 1 0 7"/>
+              <path d="M17 6a6 6 0 0 1 0 12"/>
+            </svg>
+          </span>
+        </div>
+        <div class="surah-row" data-surah="rehman">
+          <span class="surah-name">سورہ رحمٰن</span>
+          <span class="speaker-icon" data-surah="rehman">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 10v4h3l4 4V6l-4 4H4z"/>
+              <path d="M14 8.5a3 3 0 0 1 0 7"/>
+              <path d="M17 6a6 6 0 0 1 0 12"/>
+            </svg>
+          </span>
+        </div>
+        <div class="surah-row" data-surah="yaseen">
+          <span class="surah-name">سورہ یس</span>
+          <span class="speaker-icon" data-surah="yaseen">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 10v4h3l4 4V6l-4 4H4z"/>
+              <path d="M14 8.5a3 3 0 0 1 0 7"/>
+              <path d="M17 6a6 6 0 0 1 0 12"/>
+            </svg>
+          </span>
+        </div>
+        <div class="surah-row" data-surah="waqiah">
+          <span class="surah-name">سورہ واقعہ</span>
+          <span class="speaker-icon" data-surah="waqiah">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 10v4h3l4 4V6l-4 4H4z"/>
+              <path d="M14 8.5a3 3 0 0 1 0 7"/>
+              <path d="M17 6a6 6 0 0 1 0 12"/>
+            </svg>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="menu-row" id="zeyaraatToggle">
+    <div class="circle">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4 20V12c0-4.4 3.6-8 8-8s8 3.6 8 8v8"/>
+        <path d="M12 4V2"/>
+        <circle cx="12" cy="2" r="1.5" fill="#fff" stroke="none"/>
+      </svg>
+    </div>
+    <span class="text">Zeyaraat</span>
+  </div>
+  <div class="prayer-wrapper">
+    <div class="prayer-dropdown" id="zeyaraatDropdown">
+      <div class="surah-list">
+        <div class="surah-row" data-imam="ali">
+          <span class="surah-name">امام علی علیہ السلام</span>
+          <span class="sep">|</span>
+          <span class="speaker-icon" data-imam="ali">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 10v4h3l4 4V6l-4 4H4z"/>
+              <path d="M14 8.5a3 3 0 0 1 0 7"/>
+              <path d="M17 6a6 6 0 0 1 0 12"/>
+            </svg>
+          </span>
+        </div>
+        <div class="surah-row" data-imam="hassan">
+          <span class="surah-name">امام حسن علیہ السلام</span>
+          <span class="sep">|</span>
+          <span class="speaker-icon" data-imam="hassan">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 10v4h3l4 4V6l-4 4H4z"/>
+              <path d="M14 8.5a3 3 0 0 1 0 7"/>
+              <path d="M17 6a6 6 0 0 1 0 12"/>
+            </svg>
+          </span>
+        </div>
+        <div class="surah-row" data-imam="hussain">
+          <span class="surah-name">امام حسین علیہ السلام</span>
+          <span class="sep">|</span>
+          <span class="speaker-icon" data-imam="hussain">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 10v4h3l4 4V6l-4 4H4z"/>
+              <path d="M14 8.5a3 3 0 0 1 0 7"/>
+              <path d="M17 6a6 6 0 0 1 0 12"/>
+            </svg>
+          </span>
+        </div>
+        <div class="surah-row" data-imam="sajjad">
+          <span class="surah-name">امام زین العابدین علیہ السلام</span>
+          <span class="sep">|</span>
+          <span class="speaker-icon" data-imam="sajjad">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 10v4h3l4 4V6l-4 4H4z"/>
+              <path d="M14 8.5a3 3 0 0 1 0 7"/>
+              <path d="M17 6a6 6 0 0 1 0 12"/>
+            </svg>
+          </span>
+        </div>
+        <div class="surah-row" data-imam="baqir">
+          <span class="surah-name">امام محمد باقر علیہ السلام</span>
+          <span class="sep">|</span>
+          <span class="speaker-icon" data-imam="baqir">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 10v4h3l4 4V6l-4 4H4z"/>
+              <path d="M14 8.5a3 3 0 0 1 0 7"/>
+              <path d="M17 6a6 6 0 0 1 0 12"/>
+            </svg>
+          </span>
+        </div>
+        <div class="surah-row" data-imam="jaffar">
+          <span class="surah-name">امام جعفر صادق علیہ السلام</span>
+          <span class="sep">|</span>
+          <span class="speaker-icon" data-imam="jaffar">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 10v4h3l4 4V6l-4 4H4z"/>
+              <path d="M14 8.5a3 3 0 0 1 0 7"/>
+              <path d="M17 6a6 6 0 0 1 0 12"/>
+            </svg>
+          </span>
+        </div>
+        <div class="surah-row" data-imam="kazim">
+          <span class="surah-name">امام موسیٰ کاظم علیہ السلام</span>
+          <span class="sep">|</span>
+          <span class="speaker-icon" data-imam="kazim">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 10v4h3l4 4V6l-4 4H4z"/>
+              <path d="M14 8.5a3 3 0 0 1 0 7"/>
+              <path d="M17 6a6 6 0 0 1 0 12"/>
+            </svg>
+          </span>
+        </div>
+        <div class="surah-row" data-imam="raza">
+          <span class="surah-name">امام علی رضا علیہ السلام</span>
+          <span class="sep">|</span>
+          <span class="speaker-icon" data-imam="raza">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 10v4h3l4 4V6l-4 4H4z"/>
+              <path d="M14 8.5a3 3 0 0 1 0 7"/>
+              <path d="M17 6a6 6 0 0 1 0 12"/>
+            </svg>
+          </span>
+        </div>
+        <div class="surah-row" data-imam="taqi">
+          <span class="surah-name">امام محمد تقی علیہ السلام</span>
+          <span class="sep">|</span>
+          <span class="speaker-icon" data-imam="taqi">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 10v4h3l4 4V6l-4 4H4z"/>
+              <path d="M14 8.5a3 3 0 0 1 0 7"/>
+              <path d="M17 6a6 6 0 0 1 0 12"/>
+            </svg>
+          </span>
+        </div>
+        <div class="surah-row" data-imam="naqi">
+          <span class="surah-name">امام علی نقی علیہ السلام</span>
+          <span class="sep">|</span>
+          <span class="speaker-icon" data-imam="naqi">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 10v4h3l4 4V6l-4 4H4z"/>
+              <path d="M14 8.5a3 3 0 0 1 0 7"/>
+              <path d="M17 6a6 6 0 0 1 0 12"/>
+            </svg>
+          </span>
+        </div>
+        <div class="surah-row" data-imam="askri">
+          <span class="surah-name">امام حسن عسکری علیہ السلام</span>
+          <span class="sep">|</span>
+          <span class="speaker-icon" data-imam="askri">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 10v4h3l4 4V6l-4 4H4z"/>
+              <path d="M14 8.5a3 3 0 0 1 0 7"/>
+              <path d="M17 6a6 6 0 0 1 0 12"/>
+            </svg>
+          </span>
+        </div>
+        <div class="surah-row" data-imam="mahdi">
+          <span class="surah-name">امام مہدی علیہ السلام</span>
+          <span class="sep">|</span>
+          <span class="speaker-icon" data-imam="mahdi">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 10v4h3l4 4V6l-4 4H4z"/>
+              <path d="M14 8.5a3 3 0 0 1 0 7"/>
+              <path d="M17 6a6 6 0 0 1 0 12"/>
+            </svg>
+          </span>
+        </div>
+    </div>
+    <div class="scroll-arrow" id="scrollArrowZeyaraat">&#9660;</div>
+  </div>
+</div>
+
+<!-- ======== BOTTOM BAR ======== -->
+<div class="bottom-bar">
+  <div class="bottom-btn" onclick="exitApp()">
+    <div class="bottom-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#0d1b2a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
+        <polyline points="10 17 15 12 10 7"/>
+        <line x1="15" y1="12" x2="3" y2="12"/>
+      </svg>
+    </div>
+    <span class="bottom-label">EXIT</span>
+  </div>
+  <div class="bottom-btn" onclick="openSettings()">
+    <div class="bottom-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#0d1b2a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="3"/>
+        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+      </svg>
+    </div>
+    <span class="bottom-label">Setting</span>
+  </div>
+  <div class="bottom-btn" onclick="shareApp()">
+    <div class="bottom-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#0d1b2a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/>
+        <polyline points="16 6 12 2 8 6"/>
+        <line x1="12" y1="2" x2="12" y2="15"/>
+      </svg>
+    </div>
+    <span class="bottom-label">Share</span>
+  </div>
+</div>
+
+<script>
+// --- STARS ---
+function makeStars(id) {
+  const c = document.getElementById(id);
+  if (!c) return;
+  for (let i = 0; i < 13; i++) {
+    const s = document.createElement('div');
+    s.className = 'bg-star';
+    s.style.left = (2 + Math.random() * 96) + '%';
+    s.style.top = (2 + Math.random() * 90) + '%';
+    const sz = 3 + Math.random() * 4;
+    s.style.width = sz + 'px';
+    s.style.height = sz + 'px';
+    s.style.animationDelay = Math.random() * 3 + 's';
+    s.style.animationDuration = (1 + Math.random() * 1.5) + 's';
+    c.appendChild(s);
+  }
+}
+makeStars('splashStars');
+makeStars('homeStars');
+
+// Audio source base URL
+var AUDIO_BASE = 'https://raw.githubusercontent.com/falsafi2-0/islamic-app/master/app/sound/';
+
+// --- TOGGLES ---
+var sections = [
+  { btn: 'prayerToggle', dd: 'prayerDropdown', wr: null },
+  { btn: 'duaToggle', dd: 'duaDropdown', wr: null },
+  { btn: 'quranToggle', dd: 'quranDropdown', wr: null },
+  { btn: 'zeyaraatToggle', dd: 'zeyaraatDropdown', wr: 'scrollArrowZeyaraat' }
+];
+
+function closeAllSections() {
+  sections.forEach(function(s) {
+    document.getElementById(s.dd).classList.remove('open');
+    document.getElementById(s.dd).classList.remove('scrollable');
+  });
+  document.querySelectorAll('.menu-row').forEach(function(r) { r.classList.remove('section-hidden'); });
+  document.querySelectorAll('.prayer-wrapper').forEach(function(w) { w.classList.remove('section-hidden'); });
+  document.querySelector('.quote-card').classList.remove('section-hidden');
+  document.getElementById('iconBar').classList.remove('show');
+}
+
+function openSection(idx) {
+  var s = sections[idx];
+  document.getElementById(s.dd).classList.add('open');
+  document.getElementById(s.dd).classList.add('scrollable');
+  document.querySelectorAll('.menu-row').forEach(function(r, i) {
+    r.classList.toggle('section-hidden', i !== idx);
+  });
+  document.querySelectorAll('.prayer-wrapper').forEach(function(w, i) {
+    w.classList.toggle('section-hidden', i !== idx);
+  });
+  document.querySelector('.quote-card').classList.add('section-hidden');
+  document.getElementById('iconBar').classList.add('show');
+  // scroll arrow click to scroll down
+  if (s.wr) {
+    var ddEl = document.getElementById(s.dd);
+    document.getElementById(s.wr).onclick = function() {
+      ddEl.scrollBy({ top: 180, behavior: 'smooth' });
+    };
+  }
+}
+
+sections.forEach(function(item, idx) {
+  document.getElementById(item.btn).onclick = function() {
+    var target = document.getElementById(item.dd);
+    var opening = !target.classList.contains('open');
+    sections.forEach(function(s) {
+      document.getElementById(s.dd).classList.remove('open');
+      document.getElementById(s.dd).classList.remove('scrollable');
+    });
+    if (opening) {
+      openSection(idx);
+    } else {
+      closeAllSections();
+    }
+  };
+});
+
+// Icon bar clicks
+document.querySelectorAll('.bar-icon').forEach(function(ic) {
+  ic.addEventListener('click', function() {
+    var section = this.getAttribute('data-section');
+    var map = { prayer: 0, dua: 1, quran: 2, zeyaraat: 3 };
+    var idx = map[section];
+    if (idx === undefined) return;
+    sections.forEach(function(s) {
+      document.getElementById(s.dd).classList.remove('open');
+      document.getElementById(s.dd).classList.remove('scrollable');
+    });
+    openSection(idx);
+  });
+});
+
+// --- QURAN ---
+var surahAudio = null;
+var lastSurah = null;
+
+document.querySelector('#quranToggle .circle').onclick = function(e) {
+  e.stopPropagation();
+  var row = document.getElementById('quranToggle');
+  if (row.classList.contains('has-active')) {
+    if (surahAudio) { surahAudio.pause(); surahAudio = null; }
+    row.classList.remove('has-active');
+    document.querySelectorAll('#quranDropdown .speaker-icon').forEach(function(ic) { ic.classList.remove('active'); });
+    lastSurah = null;
+  }
+};
+
+document.querySelectorAll('#quranDropdown .speaker-icon').forEach(function(ic) {
+  ic.addEventListener('click', function(e) {
+    e.stopPropagation();
+    var surah = this.getAttribute('data-surah');
+    if (surah === lastSurah) {
+      if (surahAudio) { surahAudio.pause(); surahAudio = null; }
+      this.classList.remove('active');
+      lastSurah = null;
+      document.getElementById('quranToggle').classList.remove('has-active');
+      return;
+    }
+    if (surahAudio) { surahAudio.pause(); surahAudio = null; }
+    document.querySelectorAll('#quranDropdown .speaker-icon').forEach(function(ic) { ic.classList.remove('active'); });
+    surahAudio = new Audio(AUDIO_BASE + 'quran/' + surah + '.mp3');
+    surahAudio.loop = true;
+    surahAudio.play().catch(function(e) { console.warn('Audio play error:', e); });
+    this.classList.add('active');
+    lastSurah = surah;
+    document.getElementById('quranToggle').classList.add('has-active');
+  });
+});
+
+// --- ZEYARAAT ---
+var zeyaraatAudio = null;
+var lastImam = null;
+
+document.querySelector('#zeyaraatToggle .circle').onclick = function(e) {
+  e.stopPropagation();
+  var row = document.getElementById('zeyaraatToggle');
+  if (row.classList.contains('has-active')) {
+    if (zeyaraatAudio) { zeyaraatAudio.pause(); zeyaraatAudio = null; }
+    row.classList.remove('has-active');
+    document.querySelectorAll('#zeyaraatDropdown .speaker-icon').forEach(function(ic) { ic.classList.remove('active'); });
+    lastImam = null;
+  }
+};
+
+document.querySelectorAll('#zeyaraatDropdown .speaker-icon').forEach(function(ic) {
+  ic.addEventListener('click', function(e) {
+    e.stopPropagation();
+    var name = this.getAttribute('data-imam');
+    if (name === lastImam) {
+      if (zeyaraatAudio) { zeyaraatAudio.pause(); zeyaraatAudio = null; }
+      this.classList.remove('active');
+      lastImam = null;
+      document.getElementById('zeyaraatToggle').classList.remove('has-active');
+      return;
+    }
+    if (zeyaraatAudio) { zeyaraatAudio.pause(); zeyaraatAudio = null; }
+    document.querySelectorAll('#zeyaraatDropdown .speaker-icon').forEach(function(ic) { ic.classList.remove('active'); });
+    zeyaraatAudio = new Audio(AUDIO_BASE + 'zeyaraat/imam-' + name + '.mp3');
+    zeyaraatAudio.loop = true;
+    zeyaraatAudio.play().catch(function(e) { console.warn('Audio play error:', e); });
+    this.classList.add('active');
+    lastImam = name;
+    document.getElementById('zeyaraatToggle').classList.add('has-active');
+  });
+});
+
+// --- PRAYER TIMES FETCH ---
+var ids = { fajr: 'tFajr', dhuhr: 'tDhuhr', asr: 'tAsr', maghrib: 'tMaghrib', isha: 'tIsha' };
+
+function setTimes(data) {
+  for (var k in ids) {
+    var el = document.getElementById(ids[k]);
+    if (el) el.textContent = data[k] || '--:--';
+  }
+}
+
+function fetchTimes(lat, lng) {
+  var tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  var url = '/api/prayer-times?lat=' + lat + '&lng=' + lng + '&tz=' + encodeURIComponent(tz);
+  fetch(url)
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      if (d.error) { console.warn(d.error); return; }
+      setTimes(d);
+      timesData = d;
+      loadArmed();
+      scheduler();
+    })
+    .catch(function(e) { console.warn('Prayer times fetch failed:', e); });
+}
+
+function loadPrayerTimes() {
+  if ('geolocation' in navigator) {
+    navigator.geolocation.getCurrentPosition(
+      function(pos) { fetchTimes(pos.coords.latitude, pos.coords.longitude); },
+      function() { fetchTimes(21.4225, 39.8262); }
+    );
+  } else {
+    fetchTimes(21.4225, 39.8262);
+  }
+}
+loadPrayerTimes();
+
+// --- PILL TOGGLES & SCHEDULER ---
+var timesData = null;
+var armed = {};
+var audioCtx = null;
+var audioBuffer = null;
+var azanAudio = null;
+
+var reciters = ['Aghati','Ghalwash','Kazem-Zadeh','Moazzen-Zadeh','Mohammad-Zadeh','Rezaeian','Rowhani-Nejad','Salimi','Sharif','Sobhdel','Tasvieh-Chi','Tookhi'];
+var selectedReciter = localStorage.getItem('azanReciter') || reciters[0];
+
+function initAudio() {
+  var file = AUDIO_BASE + 'azaan/Tasvieh-Chi.mp3';
+  return fetch(file)
+    .then(function(r) { return r.arrayBuffer(); })
+    .then(function(buf) {
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      return audioCtx.decodeAudioData(buf);
+    })
+    .then(function(buf) { audioBuffer = buf; return buf; });
+}
+
+function playAzan() {
+  audioBuffer = null;
+  initAudio()
+    .then(function(buf) {
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      var src = audioCtx.createBufferSource();
+      src.buffer = buf;
+      src.connect(audioCtx.destination);
+      src.start(0);
+    })
+    .catch(function(e) { console.warn('Audio play error:', e); });
+}
+
+// render reciter list
+function renderReciters() {
+  var list = document.getElementById('reciterList');
+  if (!list) return;
+  list.innerHTML = '';
+  reciters.forEach(function(name) {
+    var row = document.createElement('div');
+    row.className = 'surah-row';
+    row.setAttribute('data-reciter', name);
+    var nameSpan = document.createElement('span');
+    nameSpan.className = 'surah-name';
+    nameSpan.textContent = name;
+    var icon = document.createElement('span');
+    icon.className = 'speaker-icon';
+    icon.setAttribute('data-reciter', name);
+    icon.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10v4h3l4 4V6l-4 4H4z"/><path d="M14 8.5a3 3 0 0 1 0 7"/><path d="M17 6a6 6 0 0 1 0 12"/></svg>';
+    if (name === selectedReciter) icon.classList.add('active');
+    row.appendChild(nameSpan);
+    row.appendChild(icon);
+    list.appendChild(row);
+    icon.addEventListener('click', function(e) {
+      e.stopPropagation();
+      if (azanAudio) { azanAudio.pause(); azanAudio = null; }
+      azanAudio = new Audio(AUDIO_BASE + 'azaan/' + name.replace(/ /g, '-') + '.mp3');
+      azanAudio.play().catch(function(e) { console.warn('Audio play error:', e); });
+    });
+  });
+}
+
+function selectReciter(name) {
+  if (name === selectedReciter) return;
+  selectedReciter = name;
+  localStorage.setItem('azanReciter', name);
+  audioBuffer = null;
+  document.querySelectorAll('#reciterList .speaker-icon').forEach(function(ic) {
+    ic.classList.toggle('active', ic.getAttribute('data-reciter') === name);
+  });
+  document.getElementById('reciterDot').classList.add('active');
+  document.getElementById('reciterPanel').classList.remove('open');
+}
+
+function updateNav() {
+  var btn = document.getElementById('prayerToggle');
+  for (var k in armed) {
+    if (armed[k]) {
+      btn.classList.add('has-armed');
+      return;
+    }
+  }
+  btn.classList.remove('has-armed');
+}
+
+function saveArmed() {
+  try { localStorage.setItem('azanArmed', JSON.stringify(Object.keys(armed))); } catch(e) {}
+}
+
+function loadArmed() {
+  if (!timesData) return;
+  var curMin = new Date().getHours() * 60 + new Date().getMinutes();
+  try {
+    var saved = JSON.parse(localStorage.getItem('azanArmed'));
+    if (!saved || !saved.length) return;
+    saved.forEach(function(name) {
+      if (!timesData[name]) return;
+      var prayerMin = timeToMinutes(timesData[name]);
+      if (prayerMin >= 0 && curMin >= prayerMin) return;
+      armed[name] = true;
+      var pill = document.querySelector('[data-prayer="' + name + '"]');
+      if (pill) pill.classList.add('armed');
+    });
+  } catch(e) {}
+  updateNav();
+  nativeScheduleArmed();
+}
+
+function togglePill(el) {
+  var prayer = el.getAttribute('data-prayer');
+  if (armed[prayer]) {
+    delete armed[prayer];
+    el.classList.remove('armed');
+  } else {
+    armed[prayer] = true;
+    el.classList.add('armed');
+  }
+  updateNav();
+  saveArmed();
+  nativeScheduleArmed();
+}
+
+function timeToMinutes(str) {
+  if (!str) return -1;
+  var p = str.split(':');
+  return parseInt(p[0], 10) * 60 + parseInt(p[1], 10);
+}
+
+function scheduler() {
+  if (!timesData) return;
+  var now = new Date();
+  var curMin = now.getHours() * 60 + now.getMinutes();
+
+  for (var k in armed) {
+    if (!armed[k]) continue;
+    var prayerMin = timeToMinutes(timesData[k]);
+    if (prayerMin >= 0 && curMin === prayerMin && now.getSeconds() < 3) {
+      delete armed[k];
+      var pill = document.querySelector('[data-prayer="' + k + '"]');
+      if (pill) pill.classList.remove('armed');
+      updateNav();
+      saveArmed();
+      playAzan();
+    }
+  }
+  setTimeout(scheduler, 2000);
+}
+
+// native alarm scheduling (Capacitor)
+function nativeScheduleArmed() {
+  if (!window.Capacitor || !window.Capacitor.Plugins || !window.Capacitor.Plugins.LocalNotifications || !timesData) return;
+  var now = new Date();
+  var today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  var notifications = [];
+  var id = 1;
+  for (var k in armed) {
+    if (!armed[k] || !timesData[k]) continue;
+    var p = timesData[k].split(':');
+    var at = new Date(today.getTime() + parseInt(p[0]) * 3600000 + parseInt(p[1]) * 60000);
+    if (at <= now) continue;
+    notifications.push({
+      title: k.charAt(0).toUpperCase() + k.slice(1),
+      body: 'Adhan time',
+      id: id++,
+      schedule: { at: at },
+      sound: selectedReciter + '.mp3',
+      extra: { prayer: k }
+    });
+  }
+  var LocalNotifications = window.Capacitor.Plugins.LocalNotifications;
+  LocalNotifications.cancelAll();
+  if (notifications.length) LocalNotifications.schedule({ notifications: notifications });
+}
+
+// listen for notification tap (opens app)
+if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.LocalNotifications) {
+  window.Capacitor.Plugins.LocalNotifications.addListener('localNotificationActionPerformed', function(notif) {
+    var prayer = notif.notification.extra && notif.notification.extra.prayer;
+    if (prayer) {
+      delete armed[prayer];
+      var pill = document.querySelector('[data-prayer="' + prayer + '"]');
+      if (pill) pill.classList.remove('armed');
+      updateNav();
+      saveArmed();
+      playAzan();
+    }
+  });
+}
+
+document.querySelectorAll('.prayer-pill[data-prayer]').forEach(function(el) {
+  el.addEventListener('click', function() { togglePill(this); });
+});
+
+// --- DUA AUDIO ---
+var duaAudio = null;
+var lastDua = null;
+
+document.querySelector('#duaToggle .circle').onclick = function(e) {
+  e.stopPropagation();
+  var row = document.getElementById('duaToggle');
+  if (row.classList.contains('has-active')) {
+    if (duaAudio) { duaAudio.pause(); duaAudio = null; }
+    row.classList.remove('has-active');
+    document.querySelectorAll('#duaDropdown .speaker-icon').forEach(function(ic) { ic.classList.remove('active'); });
+    lastDua = null;
+  }
+};
+
+document.querySelectorAll('#duaDropdown .speaker-icon').forEach(function(ic) {
+  ic.addEventListener('click', function(e) {
+    e.stopPropagation();
+    var dua = this.getAttribute('data-dua');
+    if (dua === lastDua) {
+      if (duaAudio) { duaAudio.pause(); duaAudio = null; }
+      this.classList.remove('active');
+      lastDua = null;
+      document.getElementById('duaToggle').classList.remove('has-active');
+      return;
+    }
+    if (duaAudio) { duaAudio.pause(); duaAudio = null; }
+    document.querySelectorAll('#duaDropdown .speaker-icon').forEach(function(ic) { ic.classList.remove('active'); });
+    duaAudio = new Audio(AUDIO_BASE + 'dua/' + dua + '.mp3');
+    duaAudio.loop = true;
+    duaAudio.play().catch(function(e) { console.warn('Audio play error:', e); });
+    this.classList.add('active');
+    lastDua = dua;
+    document.getElementById('duaToggle').classList.add('has-active');
+  });
+});
+
+// --- ADHAN VOICE PILL ---
+document.getElementById('adhanReciterBtn').addEventListener('click', function() {
+  var panel = document.getElementById('reciterPanel');
+  var opening = !panel.classList.contains('open');
+  panel.classList.toggle('open');
+  if (opening) {
+    renderReciters();
+    var dd = document.getElementById('prayerDropdown');
+    var top = this.parentElement.offsetTop + this.parentElement.offsetHeight;
+    setTimeout(function() { dd.scrollTop = top; }, 50);
+  }
+});
+
+// init adhan voice dot
+document.getElementById('reciterDot').classList.add('active');
+
+// --- TRANSITION ---
+(function() {
+  var fromSplash = location.search.indexOf('from=splash') !== -1;
+  if (fromSplash) {
+    document.getElementById('splash').style.display = 'none';
+    document.getElementById('home').classList.add('show');
+    document.getElementById('homeGlow').classList.add('fly-in');
+    return;
+  }
+  setTimeout(function() {
+    document.getElementById('splash').classList.add('hide');
+    document.getElementById('home').classList.add('show');
+    document.getElementById('splashMoon').classList.add('fly-out');
+    document.getElementById('splashStar').classList.add('fly-out');
+    document.getElementById('homeMoon').classList.add('fly-in');
+    document.getElementById('homeStar').classList.add('fly-in');
+    document.getElementById('homeGlow').classList.add('fly-in');
+    setTimeout(function() { document.getElementById('splash').style.display = 'none'; }, 800);
+  }, 3000);
+})();
+
+// --- BOTTOM BAR ---
+function exitApp() {
+  if (navigator.app) {
+    navigator.app.exitApp();
+  } else {
+    window.close();
+  }
+}
+function openSettings() {
+  console.log('Settings');
+}
+function shareApp() {
+  if (navigator.share) {
+    navigator.share({ title: 'Islamic Utility', text: 'بے شک ہم اللہ کے لیے ہیں اور اسی کی طرف لوٹ کر جانے والے ہیں', url: location.href });
+  }
+}
+
+// --- DAILY QUOTE ---
+var dailyQuotes = [{t:"بے شک اللہ سننے والا، جاننے والا ہے۔",r:"سورۃ البقرہ: 127"},{t:"بے شک اللہ ہر چیز پر قادر ہے۔",r:"سورۃ البقرہ: 20"},{t:"اللہ بہت بخشنے والا، نہایت رحم کرنے والا ہے۔",r:"سورۃ النساء: 96"},{t:"اللہ ہر چیز کو خوب جاننے والا ہے۔",r:"سورۃ البقرہ: 282"},{t:"اللہ ہر چیز کو دیکھنے والا ہے۔",r:"سورۃ الحجرات: 18"},{t:"نماز قائم کرو اور زکوٰۃ ادا کرو۔",r:"سورۃ البقرہ: 43"},{t:"اللہ کو خوب یاد کرو۔",r:"سورۃ الاحزاب: 41"},{t:"اللہ ہی بہترین رزق دینے والا ہے۔",r:"سورۃ الجمعہ: 11"},{t:"بے شک اللہ شکر کرنے والوں کو پسند کرتا ہے۔",r:"سورۃ آل عمران: 144"},{t:"بے شک اللہ متقیوں کے ساتھ ہے۔",r:"سورۃ البقرہ: 194"},{t:"بے شک اللہ نیک لوگوں کا اجر ضائع نہیں کرتا۔",r:"سورۃ التوبہ: 120"},{t:"اللہ ہی پر بھروسہ کرو اگر تم مومن ہو۔",r:"سورۃ المائدہ: 23"},{t:"اللہ بہترین فیصلہ کرنے والا ہے۔",r:"سورۃ الاعراف: 87"},{t:"اللہ بہترین مددگار ہے۔",r:"سورۃ آل عمران: 150"},{t:"بے شک اللہ ہر چیز کا علم رکھتا ہے۔",r:"سورۃ الانفال: 75"},{t:"اللہ حق کی طرف ہدایت دیتا ہے۔",r:"سورۃ یونس: 35"},{t:"اللہ صبر کرنے والوں کا اجر ضائع نہیں کرتا۔",r:"سورۃ ہود: 115"},{t:"اللہ کی رحمت نیکی کرنے والوں کے قریب ہے۔",r:"سورۃ الاعراف: 56"},{t:"اللہ کے وعدے میں کوئی تبدیلی نہیں۔",r:"سورۃ یونس: 64"},{t:"بے شک اللہ اپنے وعدے کے خلاف نہیں کرتا۔",r:"سورۃ آل عمران: 9"},{t:"اللہ اپنے بندوں پر مہربان ہے۔",r:"سورۃ البقرہ: 207"},{t:"اللہ معاف کرنے والا اور درگزر کرنے والا ہے۔",r:"سورۃ النساء: 99"},{t:"قرآن ایمان والوں کے لیے ہدایت اور رحمت ہے۔",r:"سورۃ النحل: 64"},{t:"یہ قرآن سب سے سیدھا راستہ دکھاتا ہے۔",r:"سورۃ الاسراء: 9"},{t:"اللہ ہی زندہ کرنے والا اور موت دینے والا ہے۔",r:"سورۃ یونس: 56"},{t:"بے شک اللہ ہر چیز پر گواہ ہے۔",r:"سورۃ الحج: 17"},{t:"اللہ تمہارے ساتھ ہے جہاں کہیں بھی تم ہو۔",r:"سورۃ الحدید: 4"},{t:"اللہ آسمانوں اور زمین کا نور ہے۔",r:"سورۃ النور: 35"},{t:"اللہ سے ڈرو تاکہ تم کامیاب ہو جاؤ۔",r:"سورۃ آل عمران: 200"},{t:"اللہ ہی بہترین وکیل ہے۔",r:"سورۃ الاحزاب: 3"},{t:"اللہ اپنے بندوں کے لیے کافی ہے۔",r:"سورۃ الزمر: 36"},{t:"بے شک میرا رب قریب ہے، دعا قبول کرنے والا ہے۔",r:"سورۃ ہود: 61"},{t:"بے شک اللہ لوگوں پر ذرہ برابر بھی ظلم نہیں کرتا۔",r:"سورۃ یونس: 44"},{t:"اللہ کسی پر ظلم نہیں کرتا بلکہ لوگ خود اپنے اوپر ظلم کرتے ہیں۔",r:"سورۃ یونس: 44"},{t:"بے شک اللہ صبر کرنے والوں کو پورا اجر دے گا۔",r:"سورۃ الزمر: 10"},{t:"اللہ ہی آسمانوں اور زمین کا مالک ہے۔",r:"سورۃ آل عمران: 189"},{t:"اللہ کے لیے ہی عزت ہے۔",r:"سورۃ المنافقون: 8"},{t:"بے شک اللہ سچی توبہ قبول کرتا ہے۔",r:"سورۃ التوبہ: 104"},{t:"اللہ کی نعمتوں کو شمار نہیں کر سکتے۔",r:"سورۃ ابراہیم: 34"},{t:"اللہ ہر توبہ کرنے والے کو پسند کرتا ہے۔",r:"سورۃ البقرہ: 222"},{t:"بے شک اللہ حق کے ساتھ فیصلہ کرتا ہے۔",r:"سورۃ غافر: 20"},{t:"اللہ ہر مشکل کے بعد آسانی پیدا کرتا ہے۔",r:"سورۃ الطلاق: 7"},{t:"جو اللہ پر بھروسہ کرے، وہ اس کے لیے کافی ہے۔",r:"سورۃ الطلاق: 3"},{t:"جو اللہ سے ڈرتا ہے، اللہ اس کے لیے راستہ نکال دیتا ہے۔",r:"سورۃ الطلاق: 2"},{t:"جو اللہ سے ڈرتا ہے، اللہ اس کے گناہ مٹا دیتا ہے اور اس کا اجر بڑھا دیتا ہے۔",r:"سورۃ الطلاق: 5"},{t:"بے شک اللہ عدل، احسان اور قرابت داروں کو دینے کا حکم دیتا ہے۔",r:"سورۃ النحل: 90"},{t:"بے شک اللہ فحاشی، برائی اور ظلم سے روکتا ہے۔",r:"سورۃ النحل: 90"},{t:"اللہ کے عہد کو پورا کرو۔",r:"سورۃ النحل: 91"},{t:"اللہ کے ذکر سے غافل نہ ہو۔",r:"سورۃ المنافقون: 9"},{t:"اللہ سے دعا کرو، عاجزی اور خاموشی کے ساتھ۔",r:"سورۃ الاعراف: 55"},{t:"عقل سب سے بڑی دولت ہے۔",r:"نہج البلاغہ: حکمت 54"},{t:"ادب بہترین میراث ہے۔",r:"نہج البلاغہ: حکمت 54"},{t:"صبر ایمان کے لیے وہی حیثیت رکھتا ہے جو جسم کے لیے سر کی ہے۔",r:"نہج البلاغہ: حکمت 82"},{t:"علم، مال سے بہتر ہے؛ علم تمہاری حفاظت کرتا ہے جبکہ مال کی حفاظت تم کرتے ہو۔",r:"نہج البلاغہ: حکمت 147"},{t:"ہر شخص کی قدر و قیمت اس چیز کے مطابق ہے جسے وہ اچھی طرح انجام دیتا ہے۔",r:"نہج البلاغہ: حکمت 81"},{t:"لوگوں سے اس طرح ملو کہ اگر مر جاؤ تو وہ تم پر روئیں، اور اگر زندہ رہو تو تم سے محبت کریں۔",r:"نہج البلاغہ: حکمت 10"},{t:"زبان درندے کی مانند ہے، اگر اسے چھوڑ دو تو کاٹ کھائے گی۔",r:"نہج البلاغہ: حکمت 60"},{t:"بخل تمام عیبوں کو جمع کر دیتا ہے۔",r:"نہج البلاغہ: حکمت 126"},{t:"حسد جسم کو گھلا دیتا ہے۔",r:"نہج البلاغہ: حکمت 225"},{t:"غصہ ایک قسم کی دیوانگی ہے۔",r:"نہج البلاغہ: حکمت 255"},{t:"خاموشی حکمت کے دروازوں میں سے ایک دروازہ ہے۔",r:"نہج البلاغہ: حکمت 133"},{t:"قناعت ایسا مال ہے جو کبھی ختم نہیں ہوتا۔",r:"نہج البلاغہ: حکمت 57"},{t:"بہترین عبادت عفت اختیار کرنا ہے۔",r:"نہج البلاغہ: حکمت 474"},{t:"جو اپنا محاسبہ کرتا ہے وہ کامیاب ہوتا ہے۔",r:"نہج البلاغہ: حکمت 208"},{t:"لوگوں دو قسم کے ہیں: یا تو دین میں تمہارے بھائی ہیں یا خلقت میں تمہارے جیسے۔",r:"نہج البلاغہ: خط 53"},{t:"انصاف ہر چیز کو اس کی جگہ پر رکھتا ہے۔",r:"نہج البلاغہ: حکمت 437"},{t:"دنیا دھوکے کا گھر ہے۔",r:"نہج البلاغہ: خطبہ 63"},{t:"تقویٰ بہترین زادِ راہ ہے۔",r:"نہج البلاغہ: متعدد مقامات"},{t:"سچائی نجات کا راستہ ہے۔",r:"نہج البلاغہ: حکمت 350"},{t:"جس نے اپنی قدر پہچان لی، وہ ہلاک نہیں ہوتا۔",r:"نہج البلاغہ: حکمت 449"},{t:"اگر تمہارا کوئی دین نہیں اور آخرت کا خوف نہیں، تو کم از کم دنیا میں آزاد انسان بن کر رہو۔",r:"یوم عاشورا، مقتل الحسین"},{t:"موت عزت کے ساتھ، ذلت کی زندگی سے بہتر ہے۔",r:"مقتل الحسین / تحف العقول"},{t:"میں اصلاحِ امتِ اپنے نانا کے لیے نکلا ہوں۔",r:"بحار الانوار، ج44"},{t:"میں نیکی کا حکم دینے اور برائی سے روکنے کے لیے قیام کر رہا ہوں۔",r:"بحار الانوار، ج44"},{t:"لوگوں کے معاملات میں حق اور انصاف سے کام لو۔",r:"تحف العقول"},{t:"ہمارا شیعہ وہ ہے جو اللہ کی اطاعت کرے۔",r:"الکافی، ج2"},{t:"عبادت صرف زیادہ نماز اور روزے کا نام نہیں، بلکہ اللہ کے حکم میں غور و فکر کرنا بھی عبادت ہے۔",r:"الکافی، ج2"},{t:"سچائی ایمان کی زینت ہے۔",r:"الکافی، ج2"},{t:"امانت ادا کرنا ایمان کی نشانی ہے۔",r:"الکافی، ج2"},{t:"جو اپنے نفس کا محاسبہ کرتا ہے وہ کامیاب ہوتا ہے۔",r:"تحف العقول"}];
+
+function setDailyQuote() {
+  var idx = Math.floor((Date.now() / 86400000) % dailyQuotes.length);
+  var q = dailyQuotes[idx];
+  var card = document.querySelector('.quote-card');
+  if (card) {
+    card.querySelector('.quote-text').textContent = q.t;
+    card.querySelector('.quote-ref').textContent = q.r;
+  }
+}
+setDailyQuote();
+</script>
+</body>
+</html>
